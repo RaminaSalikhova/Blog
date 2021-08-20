@@ -10,3 +10,29 @@
     height: 100vh;
     place-items: center;
 }
+
+#error404-body{
+    background-color: black;
+    color: white;
+}
+
+#error404-h1 {
+    color: red;
+}
+
+#error404-h6{
+    color: red;
+    text-decoration: underline;
+}
+
+body.a {
+    color: #1b1e21;
+    outline: none;
+    text-decoration: none;
+    padding: 2px 1px 0;
+}
+
+a:hover {
+    border-bottom: 1px solid;
+    background: #f1b0b7;
+}
