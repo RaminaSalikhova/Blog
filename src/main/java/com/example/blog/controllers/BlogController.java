@@ -1,7 +1,11 @@
 package com.example.blog.controllers;
 
 import com.example.blog.models.Post;
+import com.example.blog.models.Subscriber;
 import com.example.blog.repo.PostRepository;
+import com.example.blog.repo.SubscriberRepository;
+import com.example.blog.services.EmailService;
+import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +19,13 @@ public class BlogController {
 
     @Autowired
     private PostRepository postRepository;
+
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private SubscriberRepository subscriberRepository;
 
     @GetMapping("/blog")
     public String blogMain(Model model) {
@@ -41,9 +52,14 @@ public class BlogController {
     }
 
     @PostMapping("/publisher/blog/add")
-    public String blogPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String fullText, Model model) {
+    public String blogPostAdd(@RequestParam String title, @RequestParam String anons,
+                              @RequestParam String fullText, Model model) {
         Post newPost = new Post(title, anons, fullText);
         postRepository.save(newPost);
+        Iterable<Subscriber> subscribers = subscriberRepository.findAll();
+        for (Subscriber item : subscribers){
+            emailService.mailingSend(item.getEmail());
+        }
         return "redirect:/publisher/blog";
     }
 

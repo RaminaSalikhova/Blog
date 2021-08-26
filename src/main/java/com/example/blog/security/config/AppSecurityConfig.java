@@ -1,8 +1,9 @@
-package com.example.blog.security;
+package com.example.blog.security.config;
 
-import com.example.blog.security.core.userdetail.UserDetailsServiceImpl;
+import com.example.blog.security.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,21 +18,28 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import javax.annotation.Resource;
 
 @EnableWebSecurity
+@Configuration
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     UserDetailsService userDetailsService;
+
+//
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login, /home, /about, /subscribe, /blog")
+                .antMatchers("/", "/login", "/home", "/about", "/subscribe", "/blog")
                 .permitAll()
 //                .antMatchers("/publisher/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/publisher/**").hasAuthority("ROLE_ADMIN")
+//                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .and()

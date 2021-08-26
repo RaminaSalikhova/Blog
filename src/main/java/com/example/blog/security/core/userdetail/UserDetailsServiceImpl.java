@@ -25,14 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .password(customuser.getPassword())
                 .authorities(customuser.getRole()).build();
         return user;
-//        return new CustomUserDetails(user);
     }
-//        User user = userRepository.getUserByUsername(username);
-//
-//        if (user == null) {
-//            throw new UsernameNotFoundException("Could not find user");
-//        }
-//        return new CustomUserDetails(user);
-//    }
 
 }

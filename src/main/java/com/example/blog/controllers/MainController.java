@@ -1,17 +1,17 @@
 package com.example.blog.controllers;
 
 import com.example.blog.models.Post;
+import com.example.blog.models.Subscriber;
 import com.example.blog.repo.PostRepository;
+import com.example.blog.repo.SubscriberRepository;
 import com.example.blog.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -24,6 +24,9 @@ public class MainController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private SubscriberRepository subscriberRepository;
 //    @Autowired
 //    private JavaMailSender javaMailSender;
 //
@@ -71,6 +74,13 @@ public class MainController {
     public String subscribe(Model model) {
         model.addAttribute("title", "Subscribe");
         return "subscribe";
+    }
+
+    @PostMapping("/subscribe")
+    public String subscriberAdd(@RequestParam String email ) {
+        Subscriber newSubscriber=new Subscriber(email);
+        subscriberRepository.save(newSubscriber);
+        return "redirect:/";
     }
 
     @GetMapping("/login")
